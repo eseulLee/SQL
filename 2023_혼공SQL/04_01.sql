@@ -76,3 +76,30 @@ PREPARE mySQL FROM 'SELECT mem_name, height FROM member ORDER BY height LIMIT ?'
 EXECUTE mySQL USING @count;  -- USING 으로 물음표(?)에 @count 변수의 값 대입
 
 -- 데이터 형 변환
+-- 함수를 이용한 명시적인 변환
+-- CAST ( 값 AS 데이터_형식 [ (길이) ] )
+-- CONVERT ( 값, 데이터_형식 [ (길이) ] )
+SELECT  AVG(price) AS '평균 가격' FROM	buy;
+
+-- CHAR, SIGNED(부호있는 정수), UNSIGNED(부호없는 정수), DATE, TIME, DATETIME 등
+SELECT  CAST(AVG(price) AS SIGNED) '평균 가격' FROM	buy;
+SELECT  CONVERT(AVG(price), SIGNED) '평균 가격' FROM	buy;
+
+SELECT CAST('2022$12$12' AS DATE);
+SELECT CAST('2022/12/12' AS DATE);
+SELECT CAST('2022%12%12' AS DATE);
+SELECT CAST('2022@12@12' AS DATE);
+
+-- CONCAT(): 문자를 이어주는 역할
+SELECT  num, CONCAT(CAST(price AS CHAR), 'X', CAST(amount AS CHAR), '=') '가격X수량',
+		price * amount '구매액'
+FROM	buy;
+
+-- 암시적인 변환
+SELECT '100' + '200';  -- 문자 '100', '200'이지만 문자는 더할 수 없으므로 자동으로 숫자로 변환해 덧셈 수행
+
+-- 문자 '100200'을 만들고 싶다면? >>> CONCAT() 사용
+SELECT CONCAT('100','200');
+
+SELECT CONCAT(100, '200');  -- 100을 문자'100'으로 변환해서 연결
+SELECT 100 + '200';         -- 문자'200'이 숫자로 변환되어 계산
